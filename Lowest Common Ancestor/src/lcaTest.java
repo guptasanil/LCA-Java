@@ -40,7 +40,7 @@ public class lcaTest {
         assertEquals('F', lca.getLCA(b, d));
         assertEquals('F', lca.getLCA(b, i));
         assertEquals('E', lca.getLCA(b, t));
-        assertEquals('0', lca.getLCA(f, a));
+        assertEquals('F', lca.getLCA(f, a));
 	}
 
 }
