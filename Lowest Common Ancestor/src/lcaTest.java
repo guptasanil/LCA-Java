@@ -5,16 +5,16 @@ import org.junit.Test;
 public class lcaTest {
 	
 	/*
-   				F
+   				7
    				/\
   			   /  \
- 		      A    C
+ 		      11   8
  		     /\     \
  		    /  \     \
- 		   H    E     I
+ 		  14   22     9
  		   	   / \     \
  		   	  /   \     \
- 		   	 B     T     D
+ 		   	 3     5     1
   
    * 
 
@@ -25,22 +25,25 @@ public class lcaTest {
 	
 	
 	public void lcatest() {
-		Node f = new Node('F', null);
-        Node a = new Node('A', f);
-        Node c = new Node('C', f);
-        Node h = new Node('H', a);
-        Node e = new Node('E', a);
-        Node i = new Node('I', c);
-        Node b = new Node('B', e);
-        Node t = new Node('T', e);
-        Node d = new Node('D', i);
+		lca tree = new lca();
+		tree.root = new Node(7);
+		tree.root.left = new Node(11);
+		tree.root.right = new Node(8);
+		tree.root.left.left = new Node(14);
+		tree.root.left.right = new Node(22);
+		tree.root.right.right = new Node(9);
+		tree.root.left.right.left = new Node(3);
+		tree.root.left.right.right = new Node(5);
+		tree.root.right.right.right = new Node(1);
         
         
-        assertEquals('A', lca.getLCA(h, t));
-        assertEquals('F', lca.getLCA(b, d));
-        assertEquals('F', lca.getLCA(b, i));
-        assertEquals('E', lca.getLCA(b, t));
-        assertEquals('F', lca.getLCA(f, a));
+        assertEquals(22, lca.getLCA(3, 5));
+        assertEquals(11, lca.getLCA(14, 3));
+        assertEquals(7, lca.getLCA(22, 1));
+        assertEquals(11, lca.getLCA(14, 11));
+        assertEquals(7, lca.getLCA(7, 14));
+        assertEquals(-1, lca.getLCA(100, 14));
+        
 	}
 
 }
