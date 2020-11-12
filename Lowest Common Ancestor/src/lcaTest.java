@@ -3,26 +3,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class lcaTest {
-	
+
 	/*
-   				7
-   				/\
-  			   /  \
- 		      11   8
- 		     /\     \
- 		    /  \     \
- 		  14   22     9
- 		   	   / \     \
- 		   	  /   \     \
- 		   	 3     5     1
-  
-   * 
+	 * 7 /\ / \ 11 8 /\ \ / \ \ 14 22 9 / \ \ / \ \ 3 5 1
+	 * 
+	 * 
+	 * 
+	 */
 
-*/
+	// @Test
 
-	
-	//@Test
-	
 //	
 //	public void lcatest() {
 //		lca tree = new lca();
@@ -45,14 +35,12 @@ public class lcaTest {
 //        assertEquals(-1, lca.getLCA(100, 14));
 //        
 //	}
-	
+
 	@Test
-	public void verticiescheck() {
-		
-		lcadag test = new lcadag(10);
-		assertEquals("The number of vertices should match the number given, thus the object has been created", test.getnumofvert(), 10);
-		
+	public void testdaglca() {
+		lcadag dag = new lcadag(3);
+		dag.addEdge(0, 1);
+		dag.addEdge(0, 2);
+		assertEquals(dag.getlca(1, 2), 0);
 	}
 }
-
-
