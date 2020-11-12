@@ -25,7 +25,6 @@ public class lcadag {
 		this.done = new boolean[vertnum];
 		this.order = new boolean[vertnum];
 
-
 		for (int i = 0; i < vertnum; i++) {
 			nodes[i] = new ArrayList<Integer>();
 		}
@@ -47,105 +46,132 @@ public class lcadag {
 		}
 
 	}
-	public boolean addEdge(int from, int to){
-        if (doesvertfit(from) && doesvertfit(to)){
-            nodes[from].add(to);  
-            adjnum[to]++;    
-            edgnum++;
-            return true;
-        }else{
-            System.out.println("Must enter vertices which exist");
-            return false;
-        }
-    }
 
+	public boolean addEdge(int from, int to) {
+		if (doesvertfit(from) && doesvertfit(to)) {
+			nodes[from].add(to);
+			adjnum[to]++;
+			edgnum++;
+			return true;
+		} else {
+			System.out.println("Must enter vertices which exist");
+			return false;
+		}
+	}
 
-    
-    public int edgin(int v){
-        if (!doesvertfit(v)){
-            return -1;
-        } else {
-            return this.adjnum[v];
-        }
-    }
-    
-    public int edgout(int v){
-        if (!doesvertfit(v)){
-            return -1;
-        } else {
-            return this.nodes[v].size();
-        }
-    }
+	public int edgin(int v) {
+		if (!doesvertfit(v)) {
+			return -1;
+		} else {
+			return this.adjnum[v];
+		}
+	}
 
-   
-    public Iterable<Integer> adj(int v){
-        return nodes[v];
-    }
+	public int edgout(int v) {
+		if (!doesvertfit(v)) {
+			return -1;
+		} else {
+			return this.nodes[v].size();
+		}
+	}
 
-    
-    public boolean isAcyclic(){ 
-    	return this.isAcylic;
-    	}
-    
-    public boolean findCycle(int v){
-        done[v] = true;
-        order[v] = true;
+	public Iterable<Integer> adj(int v) {
+		return nodes[v];
+	}
 
-        for (int i : adj(v)){
-            if (!done[i]){
-                findCycle(i);
-            } 
-            else if (order[i]){
-                
-                isAcylic = true;
-                return true;    
-            }
-        }
+	public boolean isAcyclic() {
+		return this.isAcylic;
+	}
 
-        order[v] = false;
-        return false;
-    }
+	public boolean findCycle(int v) {
+		done[v] = true;
+		order[v] = true;
 
-  
-    public ArrayList<Integer> Search(int source){
-        boolean visited[] = new boolean[this.vertnum];
+		for (int i : adj(v)) {
+			if (!done[i]) {
+				findCycle(i);
+			} else if (order[i]) {
 
-        LinkedList<Integer> queue = new LinkedList<Integer>();
-        ArrayList<Integer> order = new ArrayList<Integer>();
+				isAcylic = true;
+				return true;
+			}
+		}
 
-        visited[source] = true;
-        queue.add(source);
+		order[v] = false;
+		return false;
+	}
 
-        while (queue.size()!=0){
-            source = queue.poll();
-            order.add(source); 
-            
-            
-            Iterator<Integer> iter = adj(source).iterator();
-            while (iter.hasNext()){
-                int node = iter.next();
-                if (!visited[node]){
-                    visited[node] = true;
-                    queue.add(node);
-                }
-            }
+	public ArrayList<Integer> Search(int source) {
+		boolean visited[] = new boolean[this.vertnum];
 
-        }
+		LinkedList<Integer> queue = new LinkedList<Integer>();
+		ArrayList<Integer> order = new ArrayList<Integer>();
 
-        
-        return order;
-    }
+		visited[source] = true;
+		queue.add(source);
 
-    
-  
-    public lcadag reverse(){
-        lcadag reversedDAG = new lcadag(this.vertnum);
-        for (int i = 0; i < this.vertnum; i++){
-            for (int j: adj(i)) {
-                reversedDAG.addEdge(j, i); 
-            }
-        }
-        return reversedDAG;
-    }
+		while (queue.size() != 0) {
+			source = queue.poll();
+			order.add(source);
+
+			Iterator<Integer> iter = adj(source).iterator();
+			while (iter.hasNext()) {
+				int node = iter.next();
+				if (!visited[node]) {
+					visited[node] = true;
+					queue.add(node);
+				}
+			}
+
+		}
+
+		return order;
+	}
+
+	public lcadag reverse() {
+		lcadag reversed = new lcadag(this.vertnum);
+		for (int i = 0; i < this.vertnum; i++) {
+			for (int j : adj(i)) {
+				reversed.addEdge(j, i);
+			}
+		}
+		return reversed;
+	}
+
+	public int getlca(int a, int b) {
+		if (findCycle(0)) {
+			System.out.println("Graph is not a Directed Acycic Graph");
+			return -1;
+		}
+
+		if (!this.doesvertfit(a) || !this.doesvertfit(b)) {
+
+			return -1;
+		}
+
+		lcadag reversed = this.reverse();
+		ArrayList<Integer> aPath = reversed.Search(a);
+		ArrayList<Integer> bPath = reversed.Search(b);
+		ArrayList<Integer> commonAncestors = new ArrayList<Integer>();
+
+		boolean commonAncestorFound = false;
+
+		for (int i = 0; i < aPath.size(); i++) {
+			for (int j = 0; j < bPath.size(); j++) {
+				if (aPath.get(i) == bPath.get(j)) {
+
+					commonAncestors.add(aPath.get(i));
+					commonAncestorFound = true;
+				}
+			}
+		}
+
+		if (commonAncestorFound) {
+			return commonAncestors.get(0);
+		} else {
+			return -1;
+		}
+
+	}
 
 }
