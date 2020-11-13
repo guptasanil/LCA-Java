@@ -67,7 +67,4 @@ public class lca {
  
         return false;
     }
-    
-    
- 
 }
